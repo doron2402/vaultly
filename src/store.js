@@ -38,7 +38,8 @@ export function init(password) {
 export function verifyPassword(password) {
   const config = JSON.parse(fs.readFileSync(configPath(), 'utf8'));
   try {
-    return decrypt(Buffer.from(config.verifier, 'base64'), password) === VERIFIER_PLAINTEXT;
+    // decrypt() now returns bytes; the verifier is known-text, so decode it.
+    return decrypt(Buffer.from(config.verifier, 'base64'), password).toString('utf8') === VERIFIER_PLAINTEXT;
   } catch {
     return false;
   }
@@ -97,6 +98,10 @@ export function save(entry, plaintext, password) {
   fs.writeFileSync(file, encrypt(plaintext, password), { mode: 0o600 });
 }
 
+/**
+ * Load and decrypt an entry.
+ * @returns {Buffer} raw secret bytes (text entries decode with `.toString('utf8')`)
+ */
 export function load(entry, password) {
   return decrypt(fs.readFileSync(entryFile(entry)), password);
 }

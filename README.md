@@ -46,8 +46,8 @@ The vault lives at `~/.passly` (override with `PASSLY_HOME`).
 
 ```sh
 # Generate, store and print a password
-passly generate password aws/admin -n 24
-passly generate password github/personal --no-symbols
+passly generate aws/admin -n 24
+passly generate github/personal --no-symbols
 
 # Fetch a secret — bare path works
 passly aws/admin

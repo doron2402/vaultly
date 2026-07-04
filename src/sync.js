@@ -2,9 +2,11 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { passlyHome } from './store.js';
+import { childEnv } from './env.js';
 
 function git(args) {
-  const res = spawnSync('git', ['-C', passlyHome(), ...args], { encoding: 'utf8' });
+  // Scrub master-password env vars so git never sees them (SECURITY_AUDIT.md M-1).
+  const res = spawnSync('git', ['-C', passlyHome(), ...args], { encoding: 'utf8', env: childEnv() });
   if (res.error) throw new Error('git is not installed — install it to use passly sync');
   return res;
 }

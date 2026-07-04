@@ -4,12 +4,13 @@ import * as store from './store.js';
 import * as sync from './sync.js';
 import { generatePassword } from './crypto.js';
 import { getMasterPassword, promptHidden } from './prompt.js';
+import { childEnv } from './env.js';
 
 const HELP = `passly — encrypted password & document store
 
 Usage:
   passly init                          Set your master password (run once)
-  passly generate password <name> [-n <chars>] [--no-symbols] [-c]
+  passly generate <name> [-n <chars>] [--no-symbols] [-c]
                                        Generate, store and print a password
   passly <name>                        Fetch a secret (same as: passly get <name>)
   passly get <name> [-c]               Fetch a secret; -c copies instead of printing
@@ -66,16 +67,27 @@ function copyToClipboard(text) {
   const cmd = process.platform === 'darwin' ? 'pbcopy'
     : process.platform === 'win32' ? 'clip' : 'xclip';
   const args = cmd === 'xclip' ? ['-selection', 'clipboard'] : [];
-  const res = spawnSync(cmd, args, { input: text });
+  // `text` may be a Buffer (binary entry) or string; both are valid stdin.
+  // childEnv() keeps the master password out of the helper's environment (M-1).
+  const res = spawnSync(cmd, args, { input: text, env: childEnv() });
   if (res.status !== 0) throw new Error(`could not copy to clipboard (${cmd} failed)`);
 }
 
+/**
+ * Emit a secret, either to the clipboard or stdout.
+ * @param {string|Buffer} secret - raw bytes (from load) or generated string
+ * @param {{copy: boolean, label: string}} opts
+ */
 function output(secret, { copy, label }) {
   if (copy) {
     copyToClipboard(secret);
     console.log(`Copied ${label} to clipboard.`);
   } else {
-    console.log(secret);
+    // Write raw bytes so binary documents come back byte-for-byte. Add a
+    // trailing newline only for a human at a TTY; piped/redirected consumers
+    // (e.g. `passly get token | curl ...`) get the exact secret (fixes L-2).
+    process.stdout.write(secret);
+    if (process.stdout.isTTY) process.stdout.write('\n');
   }
 }
 
@@ -124,14 +136,14 @@ async function cmdInit() {
   const password = await getMasterPassword({ confirm: true, promptText: 'New master password: ' });
   store.init(password);
   console.log(`Done. Vault created at ${store.passlyHome()}`);
-  console.log("Try: passly generate password aws/doron -n 24");
+  console.log("Try: passly generate aws/doron -n 24");
 }
 
 async function cmdGenerate(positional, flags) {
-  // Accept both `generate password <name>` and `generate <name>`.
-  const kind = positional[0] === 'password' ? positional.shift() : 'password';
-  const name = store.normalizeEntry(positional[0] ?? (() => { throw new Error('usage: passly generate password <name> [-n <chars>]'); })());
-  void kind;
+  // Canonical form is `generate <name>`. The legacy `generate password <name>`
+  // is still accepted (backward compatible) by dropping a leading "password".
+  if (positional[0] === 'password') positional.shift();
+  const name = store.normalizeEntry(positional[0] ?? (() => { throw new Error('usage: passly generate <name> [-n <chars>]'); })());
   const password = await unlock();
   const secret = generatePassword(flags.length, { symbols: flags.symbols });
   if (store.exists(name)) {
@@ -157,7 +169,8 @@ async function cmdInsert(name, flags) {
   const password = await unlock();
   let secret;
   if (flags.file) {
-    secret = fs.readFileSync(flags.file, 'utf8');
+    // Read as raw bytes so documents (keys, PDFs, images) are stored intact (H-1).
+    secret = fs.readFileSync(flags.file);
   } else {
     secret = await promptHidden(`Secret for ${entry}: `);
     if (!secret) throw new Error('secret cannot be empty');

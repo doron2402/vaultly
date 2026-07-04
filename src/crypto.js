@@ -13,16 +13,34 @@ function deriveKey(password, salt) {
 }
 
 // File layout: MAGIC(4) | version(1) | salt(16) | iv(12) | tag(16) | ciphertext
+/**
+ * Encrypt a secret under a fresh, password-derived key.
+ * Accepts raw bytes so binary documents (SSH keys, PDFs, images) round-trip
+ * byte-for-byte; a string is encoded as UTF-8.
+ * @param {string|Buffer} plaintext - secret to seal
+ * @param {string} password - master password
+ * @returns {Buffer} MAGIC(4)|version(1)|salt(16)|iv(12)|tag(16)|ciphertext
+ */
 export function encrypt(plaintext, password) {
+  // Normalize to bytes up front — never lossily UTF-8-decode binary input.
+  const data = Buffer.isBuffer(plaintext) ? plaintext : Buffer.from(plaintext, 'utf8');
   const salt = crypto.randomBytes(SALT_LEN);
   const iv = crypto.randomBytes(IV_LEN);
   const key = deriveKey(password, salt);
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-  const ciphertext = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
+  const ciphertext = Buffer.concat([cipher.update(data), cipher.final()]);
   const tag = cipher.getAuthTag();
   return Buffer.concat([MAGIC, Buffer.from([VERSION]), salt, iv, tag, ciphertext]);
 }
 
+/**
+ * Decrypt a passly blob. Returns RAW BYTES; callers that know an entry is text
+ * (e.g. the verifier) decode with `.toString('utf8')`. Throws on a wrong
+ * password or any tampering (GCM auth failure).
+ * @param {Buffer} blob
+ * @param {string} password
+ * @returns {Buffer} decrypted plaintext bytes
+ */
 export function decrypt(blob, password) {
   if (blob.length < MAGIC.length + 1 + SALT_LEN + IV_LEN + TAG_LEN || !blob.subarray(0, 4).equals(MAGIC)) {
     throw new Error('not a passly file (bad header)');
@@ -36,7 +54,7 @@ export function decrypt(blob, password) {
   const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(tag);
   try {
-    return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
+    return Buffer.concat([decipher.update(ciphertext), decipher.final()]);
   } catch {
     throw new Error('wrong master password (or the file is corrupted)');
   }
