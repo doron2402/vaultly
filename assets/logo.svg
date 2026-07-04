@@ -1,0 +1,30 @@
+<svg width="740" height="150" viewBox="0 0 740 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="130" y2="130" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366F1"/>
+      <stop offset="0.55" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="word" x1="170" y1="40" x2="540" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- gradient tile -->
+  <rect x="10" y="10" width="130" height="130" rx="30" fill="url(#tile)"/>
+  <rect x="10" y="10" width="130" height="130" rx="30" fill="white" fill-opacity="0.06"/>
+
+  <!-- padlock -->
+  <path d="M75 38c-13.3 0-24 10.7-24 24v10h10V62c0-7.7 6.3-14 14-14s14 6.3 14 14v10h10V62c0-13.3-10.7-24-24-24z" fill="#fff"/>
+  <rect x="43" y="70" width="64" height="46" rx="12" fill="#fff"/>
+  <circle cx="75" cy="89" r="7" fill="#7C6CF0"/>
+  <rect x="72" y="93" width="6" height="13" rx="3" fill="#7C6CF0"/>
+
+  <!-- folder-tree ticks on the tile -->
+  <rect x="24" y="24" width="4" height="0" fill="none"/>
+
+  <!-- wordmark -->
+  <text x="168" y="92" font-family="'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif" font-size="64" font-weight="800" letter-spacing="-2" fill="url(#word)">passly</text>
+  <text x="172" y="124" font-family="'SF Mono','Cascadia Code',Menlo,Consolas,monospace" font-size="16" fill="#94A3B8">your secrets, neatly filed &#183; sealed with one password</text>
+</svg>

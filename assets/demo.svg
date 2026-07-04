@@ -1,0 +1,38 @@
+<svg width="680" height="400" viewBox="0 0 680 400" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="'SF Mono','Cascadia Code',Menlo,Consolas,monospace" font-size="14">
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="680" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- window -->
+  <rect x="2" y="2" width="676" height="396" rx="14" fill="url(#frame)"/>
+  <rect x="4" y="4" width="672" height="392" rx="12" fill="#0F172A"/>
+
+  <!-- title bar -->
+  <circle cx="26" cy="26" r="6" fill="#FF5F57"/>
+  <circle cx="46" cy="26" r="6" fill="#FEBC2E"/>
+  <circle cx="66" cy="26" r="6" fill="#28C840"/>
+  <text x="340" y="31" text-anchor="middle" fill="#64748B" font-size="12">~ passly</text>
+
+  <!-- session -->
+  <text x="28" y="66" fill="#34D399">$</text>
+  <text x="46" y="66" fill="#E2E8F0">passly generate password aws/doron -n 24</text>
+  <text x="28" y="90" fill="#A5B4FC">Master password:</text>
+  <text x="28" y="114" fill="#FDE047">tR7#pV!m2xQz9&amp;Kf4wN8be(D</text>
+  <text x="28" y="138" fill="#64748B">Stored at aws/doron (24 chars).</text>
+
+  <text x="28" y="176" fill="#34D399">$</text>
+  <text x="46" y="176" fill="#E2E8F0">passly aws/dor</text>
+  <text x="28" y="200" fill="#F87171">passly: nothing stored at 'aws/dor'. Did you mean:</text>
+  <text x="46" y="224" fill="#22D3EE">aws/doron</text>
+
+  <text x="28" y="262" fill="#34D399">$</text>
+  <text x="46" y="262" fill="#E2E8F0">passly list</text>
+  <text x="28" y="286" fill="#A78BFA">passly store</text>
+  <text x="28" y="310" fill="#475569">├── <tspan fill="#22D3EE">aws</tspan></text>
+  <text x="28" y="334" fill="#475569">│   ├── <tspan fill="#E2E8F0">doron</tspan></text>
+  <text x="28" y="358" fill="#475569">│   └── <tspan fill="#E2E8F0">prod/root</tspan></text>
+  <text x="28" y="382" fill="#475569">└── <tspan fill="#22D3EE">github</tspan><tspan fill="#475569">/</tspan><tspan fill="#E2E8F0">personal</tspan></text>
+</svg>
