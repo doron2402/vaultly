@@ -5,7 +5,7 @@
 <br/>
 
 **Passly is a zero-dependency command-line vault for passwords and private documents.**
-Every secret lives as its own AES-256-GCM encrypted file, organized in folders like `aws/doron`,
+Every secret lives as its own AES-256-GCM encrypted file, organized in folders like `aws/admin`,
 unlocked by a single master password — and because the vault is just a directory of ciphertext,
 it syncs anywhere through git.
 
@@ -27,7 +27,7 @@ it syncs anywhere through git.
 ## Why passly?
 
 - 🔐 **One password, everything sealed.** Each entry is encrypted on its own — fresh scrypt salt and IV per file, GCM-authenticated so tampering is detected. Nothing ever touches disk in plaintext.
-- 🗂 **Secrets that nest like folders.** `aws/doron`, `work/gcp/service-account` — browse them as a tree, fetch them by path.
+- 🗂 **Secrets that nest like folders.** `aws/admin`, `work/gcp/service-account` — browse them as a tree, fetch them by path.
 - 💡 **It meets you halfway.** Typo a name and passly suggests the closest matches; hit a folder and it shows you what's inside.
 - ☁️ **Sync without a service.** The vault is a git repo of ciphertext — push it to a private GitHub repo and pull it on every machine you own. No server, no subscription, no trust in anyone's cloud.
 - 🪶 **Zero dependencies.** ~600 lines of Node.js and nothing in `node_modules`. Audit it over coffee.
@@ -35,7 +35,7 @@ it syncs anywhere through git.
 ## Install
 
 ```sh
-git clone https://github.com/doron2402/passly.git && cd passly
+git clone https://github.com/admin2402/passly.git && cd passly
 npm link          # or: npm install -g .
 passly init       # pick your master password — it encrypts everything
 ```
@@ -46,12 +46,12 @@ The vault lives at `~/.passly` (override with `PASSLY_HOME`).
 
 ```sh
 # Generate, store and print a password
-passly generate password aws/doron -n 24
+passly generate password aws/admin -n 24
 passly generate password github/personal --no-symbols
 
 # Fetch a secret — bare path works
-passly aws/doron
-passly get aws/doron -c          # copy to clipboard instead of printing
+passly aws/admin
+passly get aws/admin -c          # copy to clipboard instead of printing
 
 # Store something you already have (hidden prompt)
 passly insert stripe/live-key
@@ -77,11 +77,11 @@ Typos get you close matches, and hitting a folder shows what's inside:
 ```
 $ passly aws/dor
 passly: nothing stored at 'aws/dor'. Did you mean:
-  aws/doron
+  aws/admin
 
 $ passly aws
 passly: 'aws' is a folder. Entries inside:
-  aws/doron
+  aws/admin
   aws/prod/root
 ```
 
@@ -122,7 +122,7 @@ the vault untouched — resolve it in `~/.passly` like any git conflict, then sy
 Set `PASSLY_PASSWORD` to skip the master-password prompt:
 
 ```sh
-PASSLY_PASSWORD=... passly aws/doron
+PASSLY_PASSWORD=... passly aws/admin
 ```
 
 `passly passwd` also honors `PASSLY_PASSWORD` (current password) and
