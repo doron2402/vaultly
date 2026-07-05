@@ -36,8 +36,8 @@ it syncs anywhere through git.
 
 ```sh
 git clone https://github.com/doron2402/vaultly.git && cd vaultly
-npm run install:local   # installs globally — the `vaultly` command is now on your PATH
-vaultly init            # pick your master password — it encrypts everything
+npm run link      # links globally — the `vaultly` command is now on your PATH
+vaultly init      # pick your master password — it encrypts everything
 ```
 
 The vault lives at `~/.vaultly` (override with `VAULTLY_HOME`).

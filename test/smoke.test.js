@@ -36,7 +36,7 @@ try {
   // stored file is encrypted on disk (no plaintext leak)
   const raw = fs.readFileSync(path.join(home, 'store', 'aws', 'doron.pass'));
   assert.ok(!raw.includes(generated), 'password not stored in plaintext');
-  assert.strictEqual(raw.subarray(0, 4).toString(), 'PSLY', 'encrypted file header');
+  assert.strictEqual(raw.subarray(0, 4).toString(), 'VLTY', 'encrypted file header');
 
   // wrong master password is rejected
   const wrongEnv = { ...env, VAULTLY_PASSWORD: 'wrong' };
@@ -106,7 +106,7 @@ try {
     'synced entry present in remote clone',
   );
   const cloned = fs.readFileSync(path.join(clone, 'store', 'synced', 'entry.pass'));
-  assert.strictEqual(cloned.subarray(0, 4).toString(), 'PSLY', 'remote copy is encrypted');
+  assert.strictEqual(cloned.subarray(0, 4).toString(), 'VLTY', 'remote copy is encrypted');
   const syncStatus = execFileSync(process.execPath, [bin, 'sync', 'status'], {
     env: gitEnv, encoding: 'utf8',
   });

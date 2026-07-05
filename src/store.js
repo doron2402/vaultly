@@ -4,9 +4,7 @@ import os from 'node:os';
 import { encrypt, decrypt } from './crypto.js';
 
 const EXT = '.pass';
-// Historical constant from the passly era — changing it would lock existing
-// vaults out (the verifier in config.json was encrypted against this string).
-const VERIFIER_PLAINTEXT = 'passly-verifier-v1';
+const VERIFIER_PLAINTEXT = 'vaultly-verifier-v1';
 
 export function vaultlyHome() {
   return process.env.VAULTLY_HOME || path.join(os.homedir(), '.vaultly');

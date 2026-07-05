@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-const MAGIC = Buffer.from('PSLY');
+const MAGIC = Buffer.from('VLTY');
 const VERSION = 1;
 const SALT_LEN = 16;
 const IV_LEN = 12;
