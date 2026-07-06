@@ -1,6 +1,6 @@
 {
   "name": "vaultly",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Zero-dependency command-line vault — passwords and documents as individually encrypted files, organized like folders, sealed with one master password, synced through git",
   "type": "module",
   "bin": {
